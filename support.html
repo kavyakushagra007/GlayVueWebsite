@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Support & Help Center — GlayVue App</title>
+  <meta name="description" content="Official Support and Help Center for GlayVue iOS app. Get assistance with 3D LiDAR scanning, glaze chemistry logs, account issues, or submit a support ticket.">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar scrolled">
+    <div class="container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-logo-icon">
+          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+          </svg>
+        </div>
+        <span>GlayVue</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html#hero" class="nav-link">Home</a></li>
+        <li><a href="index.html#features" class="nav-link">Features</a></li>
+        <li><a href="index.html#faq" class="nav-link">FAQ</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle Theme">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Support Page Hero Header -->
+  <section class="legal-page-header">
+    <div class="container">
+      <h1 class="section-title">GlayVue Help & Support Portal</h1>
+      <p class="section-subtitle">Need help with LiDAR 3D scanning, glaze recipe syncing, or account management? We're here for you.</p>
+    </div>
+  </section>
+
+  <!-- Troubleshooting Cards & Contact Form Grid -->
+  <section class="legal-content-section">
+    <div class="container">
+      
+      <div class="contact-grid">
+        
+        <!-- Left: Quick Troubleshooting Guides -->
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+          
+          <h2 style="font-size: 1.6rem;">Quick Troubleshooting Guides</h2>
+
+          <div class="legal-box" style="padding: 1.5rem;">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; color: var(--brand-terracotta);">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+              </svg>
+              <h3 style="font-size: 1.1rem; margin: 0;">LiDAR 3D Scan Optimization</h3>
+            </div>
+            <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">
+              Ensure your ceramic piece is placed on a matte surface with well-lit ambient room light. Avoid transparent glass turntables or direct intense glare while scanning.
+            </p>
+          </div>
+
+          <div class="legal-box" style="padding: 1.5rem;">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; color: var(--brand-teal);">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+              </svg>
+              <h3 style="font-size: 1.1rem; margin: 0;">Recipe Cloud Syncing</h3>
+            </div>
+            <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">
+              If your GlazeLog entries are not updating across your iPhone and iPad, pull down to refresh on the GlazeLog tab or check your internet connection.
+            </p>
+          </div>
+
+          <div class="legal-box" style="padding: 1.5rem;">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; color: var(--brand-gold);">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+              </svg>
+              <h3 style="font-size: 1.1rem; margin: 0;">Subscription Restoration</h3>
+            </div>
+            <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">
+              Purchased GlayVue Pro on a new iPhone? Navigate to <strong>My Studio Shelf → Settings → Restore Purchases</strong> to activate your Apple ID entitlements.
+            </p>
+          </div>
+
+        </div>
+
+        <!-- Right: Support Ticket Form -->
+        <div id="contact" class="contact-card">
+          <h2 style="font-size: 1.6rem; margin-bottom: 0.5rem;">Submit Support Ticket</h2>
+          <p style="font-size: 0.9rem; margin-bottom: 1.5rem;">Our ceramic software support team usually responds within 24 hours.</p>
+
+          <form id="supportForm">
+            
+            <div class="form-group">
+              <label for="fullName">Your Full Name</label>
+              <input type="text" id="fullName" class="form-control" placeholder="e.g. Sarah Jenkins" required>
+            </div>
+
+            <div class="form-group">
+              <label for="emailAddr">Email Address</label>
+              <input type="email" id="emailAddr" class="form-control" placeholder="e.g. sarah@potterystudio.com" required>
+            </div>
+
+            <div class="form-group">
+              <label for="category">Support Category</label>
+              <select id="category" class="form-control" required>
+                <option value="">Select issue category...</option>
+                <option value="lidar">3D LiDAR Scanning Help</option>
+                <option value="glaze">Metal Glaze Shader Issue</option>
+                <option value="glazelog">GlazeLog & Recipe Data</option>
+                <option value="account">Account & Subscriptions</option>
+                <option value="feature">Feature Request & Feedback</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="message">Detailed Description</label>
+              <textarea id="message" class="form-control" placeholder="Please describe what happened, your device model, and iOS version..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; border-radius: var(--radius-md);">
+              <span>Send Support Request</span>
+            </button>
+
+            <!-- Success Notification Toast -->
+            <div id="toastMsg" class="toast-msg"></div>
+
+          </form>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>© 2026 GlayVue. All rights reserved.</p>
+        <p><a href="index.html" style="color: var(--brand-terracotta);">Return to Home</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
