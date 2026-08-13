@@ -3,74 +3,115 @@
    The Ultimate 3D Studio & Glaze Lab for Ceramic Artists & Potters
    ========================================================================== */
 
-/* --------------------------------------------------------------------------
-   1. CSS Custom Properties & Theme Variables
-   -------------------------------------------------------------------------- */
 :root {
-  /* Color Palette - Ceramic Earth & Glaze Palette (Light Theme Default) */
-  --brand-terracotta: #D96B43;
-  --brand-terracotta-hover: #C2562E;
+  /* ---- Brand Colors ---- */
+  --brand-terracotta: #301614;
+  --brand-terracotta-hover: #4A221E;
+  --accent-color: #301614;
+  --accent-hover: #4A221E;
   --brand-teal: #2A8C82;
   --brand-teal-hover: #1F6D66;
-  --brand-gold: #E5AC44;
-  --brand-clay-dark: #38241A;
-  
-  --bg-main: #FAF7F2;
-  --bg-surface: #F2ECE1;
+  --brand-gold: #D99B26;
+  --brand-clay-dark: #2D2623;
+
+  /* ---- Background Gradient (App Palette) ---- */
+  /* Light: Top rgb(245,218,155) → Bottom rgb(247,247,247) */
+  --bg-gradient: linear-gradient(180deg, rgb(245, 218, 155) 0%, rgb(247, 247, 247) 45%, rgb(247, 247, 247) 100%);
+  --bg-top: rgb(245, 218, 155);
+  --bg-main: rgb(247, 247, 247);
+  --bg-surface: rgba(250, 243, 220, 0.55);
   --bg-surface-elevated: #FFFFFF;
-  --bg-card: rgba(255, 255, 255, 0.85);
-  --bg-card-hover: rgba(255, 255, 255, 0.95);
-  
-  --text-main: #241E1A;
-  --text-muted: #73675E;
-  --text-inverse: #FAF7F2;
-  
-  --border-color: rgba(217, 107, 67, 0.15);
-  --border-color-hover: rgba(217, 107, 67, 0.35);
-  
-  --shadow-sm: 0 4px 12px rgba(56, 36, 26, 0.04);
-  --shadow-md: 0 8px 24px rgba(56, 36, 26, 0.08);
-  --shadow-lg: 0 16px 40px rgba(56, 36, 26, 0.12);
-  --shadow-glow: 0 0 35px rgba(217, 107, 67, 0.25);
-  
-  --glass-bg: rgba(250, 247, 242, 0.8);
-  --glass-border: rgba(255, 255, 255, 0.5);
-  
+
+  /* ---- Liquid Glass System (Light Mode) ---- */
+  /* bg-card = solid color for backdrop-filter to blur through */
+  --bg-card: rgba(255, 255, 255, 0.5);
+  --bg-card-tint: rgba(245, 218, 155, 0.18);
+  --bg-card-hover: rgba(255, 255, 255, 0.7);
+  --glass-blur: blur(22px) saturate(200%);
+  --glass-border: rgba(255, 255, 255, 0.7);
+  --glass-border-bottom: rgba(180, 155, 100, 0.25);
+  --glass-border-hover: rgba(48, 22, 20, 0.3);
+  --glass-shadow: 0 8px 32px rgba(45, 38, 35, 0.06), 0 1.5px 0 0 rgba(255, 255, 255, 0.9) inset, 0 -1px 0 0 rgba(48, 22, 20, 0.06) inset;
+  --glass-shadow-hover: 0 16px 48px rgba(45, 38, 35, 0.12), 0 1.5px 0 0 rgba(255, 255, 255, 1) inset, 0 -1px 0 0 rgba(48, 22, 20, 0.1) inset;
+
+  /* ---- Text ---- */
+  --text-main: #25201C;
+  --text-muted: #7A6E65;
+  --text-inverse: rgb(247, 247, 247);
+
+  /* ---- Borders ---- */
+  --border-color: rgba(48, 22, 20, 0.12);
+  --border-color-hover: rgba(48, 22, 20, 0.3);
+
+  /* ---- Shadows ---- */
+  --shadow-sm: 0 2px 8px rgba(45, 38, 35, 0.05);
+  --shadow-md: 0 6px 20px rgba(45, 38, 35, 0.08);
+  --shadow-lg: 0 16px 40px rgba(45, 38, 35, 0.12);
+  --shadow-glow: 0 0 35px rgba(245, 218, 155, 0.5);
+
+  /* ---- Navbar ---- */
+  --navbar-initial-bg: rgba(245, 218, 155, 0.4);
+  --glass-bg: rgba(245, 218, 155, 0.75);
+
+  /* ---- Typography & Radius ---- */
   --font-serif: 'Playfair Display', Georgia, serif;
   --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
-  
   --radius-sm: 8px;
   --radius-md: 16px;
   --radius-lg: 24px;
   --radius-xl: 32px;
   --radius-pill: 9999px;
-  
+
+  /* ---- Transitions ---- */
   --transition-fast: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   --transition-normal: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   --transition-slow: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 [data-theme="dark"] {
-  --bg-main: #141210;
-  --bg-surface: #1E1B18;
-  --bg-surface-elevated: #282420;
-  --bg-card: rgba(36, 32, 28, 0.75);
-  --bg-card-hover: rgba(45, 40, 35, 0.9);
-  
-  --text-main: #FAF7F2;
-  --text-muted: #A3998E;
-  --text-inverse: #141210;
-  
-  --border-color: rgba(229, 172, 68, 0.18);
-  --border-color-hover: rgba(229, 172, 68, 0.35);
-  
-  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.2);
-  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
-  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.5);
-  --shadow-glow: 0 0 40px rgba(229, 172, 68, 0.18);
-  
-  --glass-bg: rgba(20, 18, 16, 0.85);
-  --glass-border: rgba(255, 255, 255, 0.08);
+  /* ---- Brand Colors (Dark accent) ---- */
+  --brand-terracotta: #6E4F39;
+  --brand-terracotta-hover: #866249;
+  --accent-color: #6E4F39;
+  --accent-hover: #866249;
+
+  /* ---- Background Gradient (Dark App Palette) ---- */
+  /* Dark: Top rgb(45,38,35) → Bottom rgb(25,25,25) */
+  --bg-gradient: linear-gradient(180deg, rgb(45, 38, 35) 0%, rgb(25, 25, 25) 45%, rgb(25, 25, 25) 100%);
+  --bg-top: rgb(45, 38, 35);
+  --bg-main: rgb(25, 25, 25);
+  --bg-surface: rgba(45, 38, 35, 0.5);
+  --bg-surface-elevated: rgb(38, 32, 29);
+
+  /* ---- Liquid Glass System (Dark Mode) ---- */
+  --bg-card: rgba(45, 38, 35, 0.45);
+  --bg-card-tint: rgba(110, 79, 57, 0.12);
+  --bg-card-hover: rgba(55, 46, 42, 0.65);
+  --glass-blur: blur(22px) saturate(180%);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-border-bottom: rgba(0, 0, 0, 0.3);
+  --glass-border-hover: rgba(110, 79, 57, 0.5);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 1.5px 0 0 rgba(255, 255, 255, 0.18) inset, 0 -1px 0 0 rgba(0, 0, 0, 0.4) inset;
+  --glass-shadow-hover: 0 16px 48px rgba(0, 0, 0, 0.6), 0 1.5px 0 0 rgba(255, 255, 255, 0.28) inset, 0 -1px 0 0 rgba(0, 0, 0, 0.5) inset;
+
+  /* ---- Text ---- */
+  --text-main: #F5EDE0;
+  --text-muted: #B0A090;
+  --text-inverse: rgb(25, 25, 25);
+
+  /* ---- Borders ---- */
+  --border-color: rgba(110, 79, 57, 0.22);
+  --border-color-hover: rgba(110, 79, 57, 0.45);
+
+  /* ---- Shadows ---- */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.6);
+  --shadow-glow: 0 0 40px rgba(110, 79, 57, 0.3);
+
+  /* ---- Navbar ---- */
+  --navbar-initial-bg: rgba(45, 38, 35, 0.3);
+  --glass-bg: rgba(40, 34, 32, 0.82);
 }
 
 /* --------------------------------------------------------------------------
@@ -90,11 +131,13 @@ html {
 
 body {
   font-family: var(--font-sans);
-  background-color: var(--bg-main);
+  background: var(--bg-gradient);
+  background-attachment: fixed;
   color: var(--text-main);
   line-height: 1.6;
   overflow-x: hidden;
-  transition: background-color var(--transition-normal), color var(--transition-normal);
+  min-height: 100vh;
+  transition: background var(--transition-normal), color var(--transition-normal);
 }
 
 h1, h2, h3, h4, .font-serif {
@@ -135,7 +178,10 @@ img, video {
   width: 100%;
   z-index: 1000;
   padding: 1.25rem 0;
-  transition: padding var(--transition-fast), background-color var(--transition-fast), backdrop-filter var(--transition-fast);
+  background-color: var(--navbar-initial-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: padding var(--transition-fast), background-color var(--transition-fast), backdrop-filter var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .navbar.scrolled {
@@ -263,14 +309,18 @@ img, video {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--brand-terracotta), #C0552F);
+  background: linear-gradient(135deg, var(--brand-terracotta), var(--brand-terracotta-hover));
   color: #FFFFFF;
-  box-shadow: 0 6px 20px rgba(217, 107, 67, 0.35);
+  box-shadow: 0 6px 20px rgba(48, 22, 20, 0.25);
+}
+
+[data-theme="dark"] .btn-primary {
+  box-shadow: 0 6px 20px rgba(110, 79, 57, 0.4);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 28px rgba(217, 107, 67, 0.45);
+  filter: brightness(1.15);
 }
 
 .btn-secondary {
@@ -338,8 +388,11 @@ img, video {
   align-items: center;
   gap: 0.5rem;
   padding: 0.4rem 1rem;
-  background: rgba(217, 107, 67, 0.1);
-  border: 1px solid rgba(217, 107, 67, 0.25);
+  background: var(--bg-card);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
   border-radius: var(--radius-pill);
   font-size: 0.85rem;
   font-weight: 600;
@@ -359,8 +412,9 @@ img, video {
 }
 
 .hero-title span {
-  background: linear-gradient(135deg, var(--brand-terracotta), var(--brand-gold));
+  background: linear-gradient(135deg, var(--brand-terracotta) 0%, var(--brand-gold) 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -450,17 +504,24 @@ img, video {
 .floating-card {
   position: absolute;
   padding: 1rem;
-  background: var(--glass-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--glass-shadow);
   display: flex;
   align-items: center;
   gap: 0.75rem;
   z-index: 12;
+  overflow: hidden;
   animation: floatAnim 6s ease-in-out infinite alternate;
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-fast);
+}
+
+.floating-card:hover {
+  border-color: var(--glass-border-hover);
+  box-shadow: var(--glass-shadow-hover);
 }
 
 .floating-card-1 {
@@ -701,51 +762,93 @@ input[type="range"].temp-range::-webkit-slider-thumb:hover {
 .feature-card {
   position: relative;
   background: var(--bg-card);
-  border: 1px solid var(--border-color);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
   padding: 2.25rem;
-  transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-fast);
-  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-fast), background-color var(--transition-fast);
+  box-shadow: var(--glass-shadow);
   display: flex;
   flex-direction: column;
   height: 100%;
+  overflow: hidden;
+}
+
+/* Liquid Glass Shimmer Sweep on Hover */
+.feature-card::before,
+.showcase-content-grid::before,
+.faq-item::before,
+.floating-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.35) 50%,
+    transparent 100%
+  );
+  transform: skewX(-20deg);
+  transition: left 0.75s cubic-bezier(0.2, 0.8, 0.2, 1);
+  pointer-events: none;
+  z-index: 4;
+}
+
+.feature-card:hover::before,
+.showcase-content-grid:hover::before,
+.faq-item:hover::before,
+.floating-card:hover::before {
+  left: 150%;
 }
 
 .feature-card:hover {
   transform: translateY(-8px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--brand-terracotta);
+  background: var(--bg-card-hover);
+  box-shadow: var(--glass-shadow-hover);
+  border-color: var(--glass-border-hover);
 }
 
 .feature-icon-box {
+  position: relative;
+  z-index: 3;
   width: 56px;
   height: 56px;
   border-radius: 16px;
-  background: rgba(217, 107, 67, 0.1);
+  background: var(--bg-card);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
   color: var(--brand-terracotta);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
   margin-bottom: 1.5rem;
+  box-shadow: var(--glass-shadow);
 }
 
 .feature-card:nth-child(2) .feature-icon-box {
-  background: rgba(42, 140, 130, 0.1);
   color: var(--brand-teal);
 }
 
 .feature-card:nth-child(3) .feature-icon-box {
-  background: rgba(229, 172, 68, 0.1);
   color: var(--brand-gold);
 }
 
 .feature-title {
+  position: relative;
+  z-index: 3;
   font-size: 1.4rem;
   margin-bottom: 0.75rem;
 }
 
 .feature-desc {
+  position: relative;
+  z-index: 3;
   font-size: 0.95rem;
   line-height: 1.65;
 }
@@ -755,7 +858,7 @@ input[type="range"].temp-range::-webkit-slider-thumb:hover {
    -------------------------------------------------------------------------- */
 .showcase-section {
   padding: 6rem 0;
-  background: var(--bg-surface);
+  background: transparent;
 }
 
 .showcase-tabs {
@@ -791,18 +894,27 @@ input[type="range"].temp-range::-webkit-slider-thumb:hover {
 }
 
 .showcase-content-grid {
+  position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 3rem;
   align-items: center;
   background: var(--bg-card);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   border-radius: var(--radius-xl);
   padding: 3rem;
-  border: 1px solid var(--border-color);
-  box-shadow: var(--shadow-md);
-  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease;
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   will-change: transform, opacity;
+  overflow: hidden;
   cursor: grab;
+}
+
+.showcase-content-grid:hover {
+  border-color: var(--glass-border-hover);
+  box-shadow: var(--glass-shadow-hover);
 }
 
 .showcase-content-grid:active {
@@ -1000,15 +1112,24 @@ input[type="range"].temp-range::-webkit-slider-thumb:hover {
 }
 
 .faq-item {
+  position: relative;
   background: var(--bg-card);
-  border: 1px solid var(--border-color);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-md);
+  box-shadow: var(--glass-shadow);
   overflow: hidden;
-  transition: border-color var(--transition-fast);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+
+.faq-item:hover {
+  border-color: var(--glass-border-hover);
 }
 
 .faq-item.active {
   border-color: var(--brand-terracotta);
+  box-shadow: var(--glass-shadow-hover);
 }
 
 .faq-question {
@@ -1063,7 +1184,7 @@ input[type="range"].temp-range::-webkit-slider-thumb:hover {
 }
 
 .cta-banner {
-  background: linear-gradient(135deg, var(--brand-terracotta), #8A2C0F);
+  background: linear-gradient(135deg, var(--brand-terracotta), var(--brand-terracotta-hover));
   border-radius: var(--radius-xl);
   padding: 4rem 2rem;
   text-align: center;
@@ -1096,8 +1217,10 @@ input[type="range"].temp-range::-webkit-slider-thumb:hover {
    10. Footer Section
    -------------------------------------------------------------------------- */
 .footer {
-  background: var(--bg-surface);
-  border-top: 1px solid var(--border-color);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-top: 1px solid var(--glass-border);
   padding: 4rem 0 2rem 0;
 }
 
@@ -1162,10 +1285,12 @@ input[type="range"].temp-range::-webkit-slider-thumb:hover {
 
 .legal-box {
   background: var(--bg-card);
-  border: 1px solid var(--border-color);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
   padding: 3rem;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--glass-shadow);
 }
 
 .legal-box h2 {

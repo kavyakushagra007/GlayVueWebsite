@@ -42,11 +42,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* --------------------------------------------------------------------------
-     2. Navbar Scroll State & Mobile Menu Toggle
+     2. Navbar Scroll State, ScrollSpy Active Links & Mobile Menu Toggle
      -------------------------------------------------------------------------- */
   const navbar = document.querySelector('.navbar');
   const mobileToggle = document.querySelector('.mobile-menu-toggle');
+  const navLinks = document.querySelectorAll('.nav-links .nav-link');
   
+  // Navbar scroll background change
   window.addEventListener('scroll', () => {
     if (window.scrollY > 30) {
       navbar?.classList.add('scrolled');
@@ -60,6 +62,69 @@ document.addEventListener('DOMContentLoaded', () => {
       document.body.classList.toggle('mobile-nav-open');
     });
   }
+
+  // Build section mapping for ScrollSpy
+  const spySections = [];
+  navLinks.forEach(link => {
+    const href = link.getAttribute('href');
+    if (href && href.startsWith('#')) {
+      const targetSection = document.querySelector(href);
+      if (targetSection) {
+        spySections.push({ link, section: targetSection });
+      }
+    }
+  });
+
+  // ScrollSpy active link updater
+  function updateActiveNavLink() {
+    const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+    
+    // On subpages like privacy.html or terms.html, mark the matching page link active if present
+    if (currentPath !== 'index.html' && currentPath !== '') {
+      navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href && href.includes(currentPath)) {
+          link.classList.add('active');
+        } else {
+          link.classList.remove('active');
+        }
+      });
+      return;
+    }
+
+    if (spySections.length === 0) return;
+
+    const scrollPosition = window.scrollY + 140; // Offset for fixed navbar + breathing room
+
+    // Check if scrolled near the bottom of the page
+    const atBottom = (window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 60);
+
+    if (atBottom) {
+      navLinks.forEach(l => l.classList.remove('active'));
+      spySections[spySections.length - 1].link.classList.add('active');
+      return;
+    }
+
+    let activeLink = spySections[0].link; // Default to first (Home)
+
+    for (let i = 0; i < spySections.length; i++) {
+      const { link, section } = spySections[i];
+      const sectionTop = section.offsetTop;
+      const sectionHeight = section.offsetHeight;
+
+      if (scrollPosition >= sectionTop) {
+        activeLink = link;
+      }
+    }
+
+    navLinks.forEach(l => l.classList.remove('active'));
+    activeLink.classList.add('active');
+  }
+
+  // Update active state on scroll & load
+  window.addEventListener('scroll', updateActiveNavLink, { passive: true });
+  window.addEventListener('resize', updateActiveNavLink, { passive: true });
+  updateActiveNavLink();
 
   // Smooth scroll for nav links & close mobile menu
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -75,6 +140,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const elementRect = targetElement.getBoundingClientRect().top;
         const elementPosition = elementRect - bodyRect;
         const offsetPosition = elementPosition - offset;
+
+        // Set active immediately on click
+        navLinks.forEach(l => l.classList.remove('active'));
+        this.classList.add('active');
 
         window.scrollTo({
           top: offsetPosition,
@@ -328,35 +397,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  /* --------------------------------------------------------------------------
-     5. Contact / Support Form Submission Handling
-     -------------------------------------------------------------------------- */
-  const supportForm = document.getElementById('supportForm');
-  const toastMsg = document.getElementById('toastMsg');
-
-  if (supportForm) {
-    supportForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      
-      const submitBtn = supportForm.querySelector('button[type="submit"]');
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Sending Message...';
-      }
-
-      setTimeout(() => {
-        if (toastMsg) {
-          toastMsg.style.display = 'block';
-          toastMsg.textContent = '✓ Thank you! Your support request has been submitted. Our team will get back to you within 24 hours.';
-        }
-        supportForm.reset();
-        if (submitBtn) {
-          submitBtn.disabled = false;
-          submitBtn.textContent = 'Send Support Request';
-        }
-      }, 1200);
-    });
-  }
 
   /* --------------------------------------------------------------------------
      6. Animated Count Up Statistics on Scroll
