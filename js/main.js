@@ -1,7 +1,11 @@
 /* ==========================================================================
-   GLAYVUE — Main Interactive Website Script
-   Handles Navigation, Dark/Light Theme Switching, FAQ Accordions,
-   Screenshot Showcase Tabs, Form Validation, and Scroll Animations.
+   GLAYVUE — Premium Interactive Website Script
+   Inspired by Googlebook.google smoothness:
+   - Particle canvas background
+   - IntersectionObserver scroll reveal
+   - 3D card tilt with glare
+   - Staggered animations
+   - FAQ accordion, Showcase tabs, Nav scroll spy
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -11,9 +15,9 @@ document.addEventListener('DOMContentLoaded', () => {
      1. Dark / Light Theme Toggle
      -------------------------------------------------------------------------- */
   const themeToggleBtn = document.getElementById('themeToggleBtn');
-  const storedTheme = localStorage.getItem('glayvue_theme') || 
-                      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-  
+  const storedTheme = localStorage.getItem('glayvue_theme') ||
+    (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'dark'); // default dark
+
   function applyTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('glayvue_theme', theme);
@@ -35,27 +39,84 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (themeToggleBtn) {
     themeToggleBtn.addEventListener('click', () => {
-      const currentTheme = document.documentElement.getAttribute('data-theme');
-      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-      applyTheme(newTheme);
+      const current = document.documentElement.getAttribute('data-theme');
+      applyTheme(current === 'dark' ? 'light' : 'dark');
     });
   }
 
   /* --------------------------------------------------------------------------
-     2. Navbar Scroll State, ScrollSpy Active Links & Mobile Menu Toggle
+     2. Hero Particle Canvas
      -------------------------------------------------------------------------- */
-  const navbar = document.querySelector('.navbar');
-  const mobileToggle = document.querySelector('.mobile-menu-toggle');
-  const navLinks = document.querySelectorAll('.nav-links .nav-link');
-  
-  // Navbar scroll background change
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 30) {
-      navbar?.classList.add('scrolled');
-    } else {
-      navbar?.classList.remove('scrolled');
+  const canvas = document.getElementById('heroCanvas');
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let animFrame;
+
+    function resizeCanvas() {
+      canvas.width  = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
     }
-  });
+
+    function createParticles() {
+      particles = [];
+      const count = Math.floor((canvas.width * canvas.height) / 14000);
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x:       Math.random() * canvas.width,
+          y:       Math.random() * canvas.height,
+          r:       Math.random() * 1.8 + 0.3,
+          dx:      (Math.random() - 0.5) * 0.3,
+          dy:      (Math.random() - 0.5) * 0.3,
+          opacity: Math.random() * 0.5 + 0.1,
+          // Color: mix of terracotta, gold, teal
+          color:   ['200,75,47', '212,137,10', '42,140,130'][Math.floor(Math.random() * 3)]
+        });
+      }
+    }
+
+    function drawParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (const p of particles) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${p.color}, ${p.opacity})`;
+        ctx.fill();
+
+        p.x += p.dx;
+        p.y += p.dy;
+        // Wrap around
+        if (p.x < 0) p.x = canvas.width;
+        if (p.x > canvas.width)  p.x = 0;
+        if (p.y < 0) p.y = canvas.height;
+        if (p.y > canvas.height) p.y = 0;
+      }
+      animFrame = requestAnimationFrame(drawParticles);
+    }
+
+    function initCanvas() {
+      resizeCanvas();
+      createParticles();
+      cancelAnimationFrame(animFrame);
+      drawParticles();
+    }
+
+    initCanvas();
+    window.addEventListener('resize', () => {
+      initCanvas();
+    });
+  }
+
+  /* --------------------------------------------------------------------------
+     3. Navbar Scroll State & ScrollSpy
+     -------------------------------------------------------------------------- */
+  const navbar     = document.querySelector('.navbar');
+  const mobileToggle = document.querySelector('.mobile-menu-toggle');
+  const navLinks   = document.querySelectorAll('.nav-links .nav-link');
+
+  window.addEventListener('scroll', () => {
+    navbar?.classList.toggle('scrolled', window.scrollY > 30);
+  }, { passive: true });
 
   if (mobileToggle) {
     mobileToggle.addEventListener('click', () => {
@@ -63,40 +124,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Build section mapping for ScrollSpy
+  // ScrollSpy
   const spySections = [];
   navLinks.forEach(link => {
     const href = link.getAttribute('href');
     if (href && href.startsWith('#')) {
-      const targetSection = document.querySelector(href);
-      if (targetSection) {
-        spySections.push({ link, section: targetSection });
-      }
+      const section = document.querySelector(href);
+      if (section) spySections.push({ link, section });
     }
   });
 
-  // ScrollSpy active link updater
   function updateActiveNavLink() {
-    const currentPath = window.location.pathname.split('/').pop() || 'index.html';
-    
-    // On subpages like privacy.html or terms.html, mark the matching page link active if present
-    if (currentPath !== 'index.html' && currentPath !== '') {
-      navLinks.forEach(link => {
-        const href = link.getAttribute('href');
-        if (href && href.includes(currentPath)) {
-          link.classList.add('active');
-        } else {
-          link.classList.remove('active');
-        }
-      });
-      return;
-    }
-
     if (spySections.length === 0) return;
-
-    const scrollPosition = window.scrollY + 140; // Offset for fixed navbar + breathing room
-
-    // Check if scrolled near the bottom of the page
+    const scrollY = window.scrollY + 140;
     const atBottom = (window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 60);
 
     if (atBottom) {
@@ -105,118 +145,159 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    let activeLink = spySections[0].link; // Default to first (Home)
-
-    for (let i = 0; i < spySections.length; i++) {
-      const { link, section } = spySections[i];
-      const sectionTop = section.offsetTop;
-      const sectionHeight = section.offsetHeight;
-
-      if (scrollPosition >= sectionTop) {
-        activeLink = link;
-      }
+    let activeLink = spySections[0].link;
+    for (const { link, section } of spySections) {
+      if (scrollY >= section.offsetTop) activeLink = link;
     }
-
     navLinks.forEach(l => l.classList.remove('active'));
     activeLink.classList.add('active');
   }
 
-  // Update active state on scroll & load
   window.addEventListener('scroll', updateActiveNavLink, { passive: true });
   window.addEventListener('resize', updateActiveNavLink, { passive: true });
   updateActiveNavLink();
 
-  // Smooth scroll for nav links & close mobile menu
+  // Smooth scroll + close mobile menu
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
+    anchor.addEventListener('click', function(e) {
       const targetId = this.getAttribute('href');
       if (targetId === '#') return;
-      const targetElement = document.querySelector(targetId);
-      if (targetElement) {
+      const target = document.querySelector(targetId);
+      if (target) {
         e.preventDefault();
         document.body.classList.remove('mobile-nav-open');
         const offset = 80;
-        const bodyRect = document.body.getBoundingClientRect().top;
-        const elementRect = targetElement.getBoundingClientRect().top;
-        const elementPosition = elementRect - bodyRect;
-        const offsetPosition = elementPosition - offset;
-
-        // Set active immediately on click
+        const top = target.getBoundingClientRect().top + window.scrollY - offset;
         navLinks.forEach(l => l.classList.remove('active'));
         this.classList.add('active');
-
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
-        });
+        window.scrollTo({ top, behavior: 'smooth' });
       }
     });
   });
 
   /* --------------------------------------------------------------------------
-     3. App Screenshot Showcase Tab Switcher
+     4. Scroll-Reveal IntersectionObserver  (Re-animates every time you scroll)
      -------------------------------------------------------------------------- */
+  const revealElements = document.querySelectorAll('.reveal, .hero-content, .hero-visual');
+
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+      } else {
+        // When element scrolls out of view (above or below), remove 'is-visible'
+        // so it re-triggers the animation cleanly every time it is scrolled back into view
+        entry.target.classList.remove('is-visible');
+      }
+    });
+  }, {
+    threshold: 0.1,
+    rootMargin: '0px 0px -30px 0px'
+  });
+
+  revealElements.forEach(el => {
+    revealObserver.observe(el);
+  });
+
   /* --------------------------------------------------------------------------
-     3. App Showcase Feature Slider & Touch Swipe Animation
+     5. 3D Card Tilt Effect with Glare
      -------------------------------------------------------------------------- */
-  const showcaseTabs = document.querySelectorAll('.showcase-tab-btn');
-  const showcaseTitle = document.getElementById('showcaseTitle');
-  const showcaseDesc = document.getElementById('showcaseDesc');
+  const tiltCards = document.querySelectorAll('.feature-card');
+
+  tiltCards.forEach(card => {
+    const glare = card.querySelector('.tilt-glare');
+
+    card.addEventListener('mousemove', (e) => {
+      const rect   = card.getBoundingClientRect();
+      const cx     = rect.left + rect.width  / 2;
+      const cy     = rect.top  + rect.height / 2;
+      const mouseX = e.clientX - cx;
+      const mouseY = e.clientY - cy;
+      const maxTilt = 10; // degrees
+
+      const rotateY =  (mouseX / (rect.width  / 2)) * maxTilt;
+      const rotateX = -(mouseY / (rect.height / 2)) * maxTilt;
+
+      card.style.transform    = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(6px)`;
+      card.style.transition   = 'transform 0.1s ease';
+
+      // Glare follows mouse
+      if (glare) {
+        const px = ((e.clientX - rect.left) / rect.width)  * 100;
+        const py = ((e.clientY - rect.top)  / rect.height) * 100;
+        glare.style.background = `radial-gradient(circle at ${px}% ${py}%, rgba(255,255,255,0.12) 0%, transparent 60%)`;
+        glare.style.opacity = '1';
+      }
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.transform  = 'perspective(800px) rotateX(0deg) rotateY(0deg) translateZ(0px)';
+      card.style.transition = 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+      if (glare) glare.style.opacity = '0';
+    });
+  });
+
+  /* --------------------------------------------------------------------------
+     6. App Showcase Feature Slider, Tabs & Touch Swipe
+     -------------------------------------------------------------------------- */
+  const showcaseTabs    = document.querySelectorAll('.showcase-tab-btn');
+  const showcaseTitle   = document.getElementById('showcaseTitle');
+  const showcaseDesc    = document.getElementById('showcaseDesc');
   const showcaseBullets = document.getElementById('showcaseBullets');
-  const showcaseImg = document.getElementById('showcaseImg');
-  const showcaseCard = document.getElementById('showcaseCard');
+  const showcaseVideo   = document.getElementById('showcaseVideo');
+  const showcaseCard    = document.getElementById('showcaseCard');
   const showcasePrevBtn = document.getElementById('showcasePrevBtn');
   const showcaseNextBtn = document.getElementById('showcaseNextBtn');
-  const showcaseDots = document.querySelectorAll('.showcase-dot');
+  const showcaseDots    = document.querySelectorAll('.showcase-dot');
 
   const featureKeys = ['lidar', 'glazelog', 'community', 'shelf'];
-  let currentIdx = 0;
+  let currentIdx  = 0;
   let isAnimating = false;
 
   const showcaseData = {
     lidar: {
       title: "Precision 3D LiDAR Scanning",
-      desc: "Transform physical ceramics into interactive 3D digital assets using your device's built-in LiDAR sensor. Capture intricate curves, wheel ridges, and fine details with high resolution.",
+      desc:  "Transform physical ceramics into interactive 3D digital assets using your device's built-in LiDAR sensor. Capture intricate curves, wheel ridges, and fine details with high resolution.",
       bullets: [
         "Instant mesh reconstruction directly on device",
         "Export 3D assets in standard USDZ and OBJ formats",
         "Accurate physical dimensions and scale measurement",
         "Seamless overlay of digital glaze simulations"
       ],
-      image: "assets/images/Simulator Screenshot - iPhone Air - 2026-08-12 at 23.09.54.png"
+      video: "assets/videos/lidar scan.mp4"
     },
     glazelog: {
       title: "Chemical Recipe & Cone Manager",
-      desc: "Keep all your glaze formulas, chemical percentages, cone firings, and firing curves meticulously organized in your digital GlazeLog lab notebook.",
+      desc:  "Keep all your glaze formulas, chemical percentages, cone firings, and firing curves meticulously organized in your digital GlazeLog lab notebook.",
       bullets: [
         "Log firing atmosphere (Oxidation vs. Reduction)",
         "Categorize by Cone 04, Cone 5, Cone 6, Cone 10",
         "Track test tiles, shrinkage, and crazing notes",
         "Search, filter, and favorite your best glazes"
       ],
-      image: "assets/images/glaze1.png"
+      video: "assets/videos/lidar scan.mp4"
     },
     community: {
       title: "Potters Hub Social Community",
-      desc: "Connect with thousands of ceramic artists, studio potters, and ceramic sculptors worldwide. Share test tile results, glaze discoveries, and studio inspiration.",
+      desc:  "Connect with thousands of ceramic artists, studio potters, and ceramic sculptors worldwide. Share test tile results, glaze discoveries, and studio inspiration.",
       bullets: [
         "Post high-resolution glaze test tiles & finished pottery",
         "Exchange recipe tips and firing atmosphere feedback",
         "Follow inspiring ceramicists and build your studio network",
         "Bookmark and favorite community glaze formulas"
       ],
-      image: "assets/images/glaze2.png"
+      video: "assets/videos/lidar scan.mp4"
     },
     shelf: {
       title: "My Digital Studio Shelf",
-      desc: "Organize your active ceramics, finished works, gallery inventory, and studio collections in a clean visual digital shelf.",
+      desc:  "Organize your active ceramics, finished works, gallery inventory, and studio collections in a clean visual digital shelf.",
       bullets: [
         "Track pieces from wet clay to bisque and final glaze fire",
         "Archive kiln load histories and firing outcomes",
         "Manage private studio collection vs. public showcase",
         "Earn ceramic milestones and studio achievements"
       ],
-      image: "assets/images/glaze3.png"
+      video: "assets/videos/lidar scan.mp4"
     }
   };
 
@@ -224,8 +305,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const data = showcaseData[key];
     if (!data) return;
     if (showcaseTitle) showcaseTitle.textContent = data.title;
-    if (showcaseDesc) showcaseDesc.textContent = data.desc;
-    if (showcaseImg) showcaseImg.src = data.image;
+    if (showcaseDesc)  showcaseDesc.textContent  = data.desc;
+    if (showcaseVideo) {
+      showcaseVideo.style.opacity = '0';
+      showcaseVideo.style.transform = 'scale(0.95)';
+      setTimeout(() => {
+        showcaseVideo.src = data.video;
+        showcaseVideo.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+        showcaseVideo.style.opacity = '1';
+        showcaseVideo.style.transform = 'scale(1)';
+      }, 150);
+    }
 
     if (showcaseBullets) {
       showcaseBullets.innerHTML = data.bullets.map(b => `
@@ -238,16 +328,9 @@ document.addEventListener('DOMContentLoaded', () => {
       `).join('');
     }
 
-    // Update active tab button
-    showcaseTabs.forEach(t => {
-      t.classList.toggle('active', t.getAttribute('data-tab') === key);
-    });
-
-    // Update active dot indicator
+    showcaseTabs.forEach(t => t.classList.toggle('active', t.getAttribute('data-tab') === key));
     const targetIndex = featureKeys.indexOf(key);
-    showcaseDots.forEach((dot, idx) => {
-      dot.classList.toggle('active', idx === targetIndex);
-    });
+    showcaseDots.forEach((dot, idx) => dot.classList.toggle('active', idx === targetIndex));
   }
 
   function goToFeature(newIdx, direction = 'right') {
@@ -260,74 +343,50 @@ document.addEventListener('DOMContentLoaded', () => {
     currentIdx = newIdx;
 
     if (showcaseCard) {
-      const exitClass = direction === 'right' ? 'slide-out-left' : 'slide-out-right';
+      const exitClass  = direction === 'right' ? 'slide-out-left' : 'slide-out-right';
       const enterClass = direction === 'right' ? 'slide-in-right' : 'slide-in-left';
 
       showcaseCard.classList.add(exitClass);
-
       setTimeout(() => {
         updateShowcaseContent(key);
         showcaseCard.classList.remove(exitClass);
         showcaseCard.classList.add(enterClass);
-
         setTimeout(() => {
           showcaseCard.classList.remove(enterClass);
           isAnimating = false;
-        }, 300);
-      }, 150);
+        }, 400);
+      }, 180);
     } else {
       updateShowcaseContent(key);
       isAnimating = false;
     }
   }
 
-  // Event listeners for Tab Buttons
   showcaseTabs.forEach(tab => {
     tab.addEventListener('click', (e) => {
       const key = e.currentTarget.getAttribute('data-tab');
       const targetIdx = featureKeys.indexOf(key);
-      const direction = targetIdx >= currentIdx ? 'right' : 'left';
-      goToFeature(targetIdx, direction);
+      goToFeature(targetIdx, targetIdx >= currentIdx ? 'right' : 'left');
     });
   });
 
-  // Event listeners for Arrow Buttons
-  if (showcasePrevBtn) {
-    showcasePrevBtn.addEventListener('click', () => {
-      goToFeature(currentIdx - 1, 'left');
-    });
-  }
-  if (showcaseNextBtn) {
-    showcaseNextBtn.addEventListener('click', () => {
-      goToFeature(currentIdx + 1, 'right');
-    });
-  }
+  if (showcasePrevBtn) showcasePrevBtn.addEventListener('click', () => goToFeature(currentIdx - 1, 'left'));
+  if (showcaseNextBtn) showcaseNextBtn.addEventListener('click', () => goToFeature(currentIdx + 1, 'right'));
 
-  // Event listeners for Dots
   showcaseDots.forEach((dot, idx) => {
-    dot.addEventListener('click', () => {
-      const direction = idx >= currentIdx ? 'right' : 'left';
-      goToFeature(idx, direction);
-    });
+    dot.addEventListener('click', () => goToFeature(idx, idx >= currentIdx ? 'right' : 'left'));
   });
 
-  // Touch Swipe & Mouse Drag Handling
+  // Touch & Mouse Drag
   const sliderWrapper = document.getElementById('showcaseSlider') || showcaseCard;
   if (sliderWrapper) {
-    let startX = 0;
-    let startY = 0;
-    let deltaX = 0;
-    let deltaY = 0;
-    let isSwiping = false;
+    let startX = 0, startY = 0, deltaX = 0, deltaY = 0;
+    let isSwiping = false, isMouseDown = false;
 
-    // Touch events
     sliderWrapper.addEventListener('touchstart', (e) => {
       if (e.touches.length !== 1) return;
-      startX = e.touches[0].clientX;
-      startY = e.touches[0].clientY;
-      deltaX = 0;
-      deltaY = 0;
-      isSwiping = true;
+      startX = e.touches[0].clientX; startY = e.touches[0].clientY;
+      deltaX = 0; deltaY = 0; isSwiping = true;
     }, { passive: true });
 
     sliderWrapper.addEventListener('touchmove', (e) => {
@@ -339,49 +398,30 @@ document.addEventListener('DOMContentLoaded', () => {
     sliderWrapper.addEventListener('touchend', () => {
       if (!isSwiping) return;
       isSwiping = false;
-      const minSwipeDistance = 40;
-      if (Math.abs(deltaX) > minSwipeDistance && Math.abs(deltaX) > Math.abs(deltaY)) {
-        if (deltaX < 0) {
-          goToFeature(currentIdx + 1, 'right');
-        } else {
-          goToFeature(currentIdx - 1, 'left');
-        }
+      if (Math.abs(deltaX) > 40 && Math.abs(deltaX) > Math.abs(deltaY)) {
+        goToFeature(currentIdx + (deltaX < 0 ? 1 : -1), deltaX < 0 ? 'right' : 'left');
       }
     });
 
-    // Mouse drag events
-    let isMouseDown = false;
     sliderWrapper.addEventListener('mousedown', (e) => {
       if (e.target.closest('button') || e.target.closest('a')) return;
-      isMouseDown = true;
-      startX = e.clientX;
-      startY = e.clientY;
-      deltaX = 0;
-      deltaY = 0;
+      isMouseDown = true; startX = e.clientX; startY = e.clientY; deltaX = 0; deltaY = 0;
     });
-
     window.addEventListener('mousemove', (e) => {
       if (!isMouseDown) return;
-      deltaX = e.clientX - startX;
-      deltaY = e.clientY - startY;
+      deltaX = e.clientX - startX; deltaY = e.clientY - startY;
     });
-
     window.addEventListener('mouseup', () => {
       if (!isMouseDown) return;
       isMouseDown = false;
-      const minSwipeDistance = 40;
-      if (Math.abs(deltaX) > minSwipeDistance && Math.abs(deltaX) > Math.abs(deltaY)) {
-        if (deltaX < 0) {
-          goToFeature(currentIdx + 1, 'right');
-        } else {
-          goToFeature(currentIdx - 1, 'left');
-        }
+      if (Math.abs(deltaX) > 40 && Math.abs(deltaX) > Math.abs(deltaY)) {
+        goToFeature(currentIdx + (deltaX < 0 ? 1 : -1), deltaX < 0 ? 'right' : 'left');
       }
     });
   }
 
   /* --------------------------------------------------------------------------
-     4. FAQ Accordion Toggle
+     7. FAQ Accordion
      -------------------------------------------------------------------------- */
   const faqItems = document.querySelectorAll('.faq-item');
   faqItems.forEach(item => {
@@ -390,44 +430,51 @@ document.addEventListener('DOMContentLoaded', () => {
       questionBtn.addEventListener('click', () => {
         const isActive = item.classList.contains('active');
         faqItems.forEach(i => i.classList.remove('active'));
-        if (!isActive) {
-          item.classList.add('active');
-        }
+        if (!isActive) item.classList.add('active');
       });
     }
   });
 
-
   /* --------------------------------------------------------------------------
-     6. Animated Count Up Statistics on Scroll
+     8. Animated Count-Up Stats (for future use)
      -------------------------------------------------------------------------- */
   const statItems = document.querySelectorAll('.stat-number');
   let animatedStats = false;
 
   function checkStatsScroll() {
-    if (animatedStats || statItems.length === 0) return;
+    if (statItems.length === 0) return;
     const firstStat = statItems[0];
     const rect = firstStat.getBoundingClientRect();
-    if (rect.top < window.innerHeight && rect.bottom >= 0) {
+    const inView = rect.top < window.innerHeight && rect.bottom >= 0;
+
+    if (inView && !animatedStats) {
       animatedStats = true;
       statItems.forEach(stat => {
-        const target = parseInt(stat.getAttribute('data-target') || '0', 10);
-        const suffix = stat.getAttribute('data-suffix') || '';
-        let current = 0;
-        const increment = Math.ceil(target / 40);
+        const target    = parseInt(stat.getAttribute('data-target') || '0', 10);
+        const suffix    = stat.getAttribute('data-suffix') || '';
+        let current     = 0;
+        const increment = Math.ceil(target / 50);
         const timer = setInterval(() => {
           current += increment;
-          if (current >= target) {
-            current = target;
-            clearInterval(timer);
-          }
+          if (current >= target) { current = target; clearInterval(timer); }
           stat.textContent = current.toLocaleString() + suffix;
-        }, 35);
+        }, 30);
       });
+    } else if (!inView && animatedStats) {
+      animatedStats = false;
     }
   }
 
-  window.addEventListener('scroll', checkStatsScroll);
+  window.addEventListener('scroll', checkStatsScroll, { passive: true });
   checkStatsScroll();
+
+  /* --------------------------------------------------------------------------
+     9. Smooth image load fallback for showcase
+     -------------------------------------------------------------------------- */
+  if (showcaseVideo) {
+    showcaseVideo.addEventListener('error', () => {
+      showcaseVideo.src = "assets/videos/lidar scan.mp4";
+    });
+  }
 
 });
