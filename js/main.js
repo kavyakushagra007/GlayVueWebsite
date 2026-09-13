@@ -264,7 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "Accurate physical dimensions and scale measurement",
         "Seamless overlay of digital glaze simulations"
       ],
-      video: "assets/videos/lidar scan.mp4"
+      video: "assets/videos/3D Lidar Scan Vdo.mp4"
     },
     glazelog: {
       title: "Chemical Recipe & Cone Manager",
