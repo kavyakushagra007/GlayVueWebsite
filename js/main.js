@@ -275,7 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "Track test tiles, shrinkage, and crazing notes",
         "Search, filter, and favorite your best glazes"
       ],
-      video: "assets/videos/lidar scan.mp4"
+      video: "assets/videos/3D Lidar Scan Vdo.mp4"
     },
     community: {
       title: "Potters Hub Social Community",
@@ -286,7 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "Follow inspiring ceramicists and build your studio network",
         "Bookmark and favorite community glaze formulas"
       ],
-      video: "assets/videos/lidar scan.mp4"
+      video: "assets/videos/3D Lidar Scan Vdo.mp4"
     },
     shelf: {
       title: "My Digital Studio Shelf",
@@ -297,7 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "Manage private studio collection vs. public showcase",
         "Earn ceramic milestones and studio achievements"
       ],
-      video: "assets/videos/lidar scan.mp4"
+      video: "assets/videos/3D Lidar Scan Vdo.mp4"
     }
   };
 
@@ -473,7 +473,7 @@ document.addEventListener('DOMContentLoaded', () => {
      -------------------------------------------------------------------------- */
   if (showcaseVideo) {
     showcaseVideo.addEventListener('error', () => {
-      showcaseVideo.src = "assets/videos/lidar scan.mp4";
+      showcaseVideo.src = "assets/videos/3D Lidar Scan Vdo.mp4";
     });
   }
 
