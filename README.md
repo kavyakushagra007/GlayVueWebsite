@@ -170,6 +170,7 @@ The landing page showcases these GlayVue iOS app capabilities:
 
 ---
 
+<<<<<<< HEAD
 ## 🤝 Contributing
 
 Contributions are welcome! To get started:
@@ -187,6 +188,9 @@ Contributions are welcome! To get started:
 This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
 
 ---
+=======
+
+>>>>>>> 3711483b0b009d50c9e65be05af60b905047cb1e
 
 ## 📬 Contact
 
