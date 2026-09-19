@@ -286,7 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "Follow inspiring ceramicists and build your studio network",
         "Bookmark and favorite community glaze formulas"
       ],
-      video: "assets/videos/3D Lidar Scan Vdo.mp4"
+      video: "assets/videos/potters hub.mp4"
     },
     shelf: {
       title: "My Digital Studio Shelf",
@@ -297,7 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "Manage private studio collection vs. public showcase",
         "Earn ceramic milestones and studio achievements"
       ],
-      video: "assets/videos/3D Lidar Scan Vdo.mp4"
+      video: "assets/videos/my shlef.mp4"
     }
   };
 
