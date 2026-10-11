@@ -170,32 +170,17 @@ The landing page showcases these GlayVue iOS app capabilities:
 
 ---
 
-<<<<<<< HEAD
-## 🤝 Contributing
-
-Contributions are welcome! To get started:
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/your-feature`
-3. Commit your changes: `git commit -m "Add your feature"`
-4. Push to the branch: `git push origin feature/your-feature`
-5. Open a Pull Request
-
----
-
 ## 📜 License
 
 This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
 
 ---
-=======
-
->>>>>>> 3711483b0b009d50c9e65be05af60b905047cb1e
 
 ## 📬 Contact
 
 - **Website:** [glayvue.app](https://glayvue.app)
-- **Email:** support@glayvue.app
+- **Support:** [glayvue.app/support.html](https://glayvue.app/support.html)
+- **Email:** isdpteam23@gmail.com
 
 ---
 
